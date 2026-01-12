@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Portfolio | Next.js Static Site',
-  description: 'A portfolio built with Next.js.',
+  title: '6a6768',
+  description: 'jef palo\'s portfolio',
   openGraph: {
-    title: 'Portfolio | Next.js Static Site',
-    description: 'A portfolio built with Next.js.',
-    url: 'https://example.com',
+    title: '6a6768',
+    description: 'jef palo\'s portfolio',
+    url: 'https://6a6768.github.io/archive/',
     siteName: 'Archive',
     type: 'website',
   },
