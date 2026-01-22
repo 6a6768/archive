@@ -14,7 +14,7 @@ const slugify = (value: string) =>
 
 const experiences: Entry[] = [
   {
-    title: 'Full-Stack Developer',
+    title: 'Full-Stack Developer, Team Lead',
     subtitle: 'UCI Undergraduate Research Opportunities Program',
     dates: 'Sep 2024 – Dec 2024',
     detail: [
@@ -38,6 +38,17 @@ const experiences: Entry[] = [
 
 const projects: Entry[] = [
   {
+    title: 'Transformer From Scratch',
+    subtitle: 'Python, PyTorch, Hugging Face',
+    dates: 'Jan 2026',
+    detail: [
+      'Built a PyTorch Transformer seq2seq for EN -> RU, trained on 17k OPUS Books pairs with custom Hugging Face WordLevel tokenizers; max sequence length 256.',
+      'Implemented a full training pipeline with checkpointing/resume, validation decoding, and TensorBoard logging of BLEU, character error rate (CER), and word error rate (WER).',
+      'Optimized for Apple M1 (MPS) with optional mixed precision, configurable batch size/loader workers, and runtime length stats to keep batches efficient.',
+    ],
+    link: 'https://github.com/6a6768/transformers',
+  },
+  {
     title: 'Image to Ingredient Prediction Model',
     subtitle: 'Python, PyTorch, OpenAI CLIP',
     dates: 'Feb 2025',
@@ -56,7 +67,6 @@ const projects: Entry[] = [
       'Utilized random forests, neural networks, linear and logistic regression, gradient boosting and stacking in order to determine whether diabetes patients would be readmitted with a ≈ 60% accuracy.',
       'Implemented randomized search cross validation to find the best hyperparameters for the models.',
     ],
-    link: 'https://example.com/demo',
   },
   {
     title: 'Minesweeper AI',
