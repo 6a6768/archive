@@ -14,6 +14,16 @@ const slugify = (value: string) =>
 
 const experiences: Entry[] = [
   {
+    title: 'Mobile Developer',
+    subtitle: 'Philippine Institute of Civil Engineers, USA Chapter',
+    dates: 'Dec 2025 – Present',
+    detail: [
+      'Developing a cross-platform mobile membership app using React Native (Expo) with a Next.js backend to improve accessibility to organization news and events for 100+ members.',
+      'Implementing secure member authentication, applications, and renewal workflows, including profile and membership status management.',
+      'Building event registration and content delivery features for newsletters, blog/vlog posts, and announcements, with real-time updates for members.',
+    ],
+  },
+  {
     title: 'Full-Stack Developer, Team Lead',
     subtitle: 'UCI Undergraduate Research Opportunities Program',
     dates: 'Sep 2024 – Dec 2024',
