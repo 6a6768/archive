@@ -74,6 +74,13 @@ a {
   font-size: 14px;
 }
 
+.about-text {
+  white-space: pre-line;
+  line-height: 1.6;
+  font-size: 14px;
+  min-height: 50px;
+}
+
 .forum-list {
   margin: 0;
   padding-left: 18px;
@@ -177,6 +184,10 @@ a {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.content > .forum-section:first-of-type {
+  margin-top: 0;
 }
 
 @media (max-width: 768px) {

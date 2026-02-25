@@ -12,6 +12,8 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
+const aboutText = `UCI 25 with a Bachelor's in Computer Science \n Specialization in Intelligent Systems \n I enjoy working with AI and ML models`;
+
 const experiences: Entry[] = [
   {
     title: 'Mobile Developer',
@@ -202,8 +204,7 @@ export default function Home() {
               <h2>About Me</h2>
             </header>
             <div className="forum-section__body">
-              <p>UCI CS AI ML
-              </p>
+              <div className="about-text">{aboutText}</div>
             </div>
           </section>
 
