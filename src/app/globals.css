@@ -110,6 +110,7 @@ a {
   color: var(--muted);
   font-size: 12px;
   white-space: nowrap;
+  font-weight: 700;
 }
 
 .entry-subtitle {
