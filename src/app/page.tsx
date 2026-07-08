@@ -16,6 +16,16 @@ const aboutText = `UCI 25 with a Bachelor's in Computer Science \n Specializatio
 
 const experiences: Entry[] = [
   {
+    title: 'Web Developer',
+    subtitle: 'Sherpa Collaborative',
+    dates: 'June 2026 – Present',
+    detail: [
+      'Build and publish new product, landing, and informational pages, update site navigation and homepage layouts, and integrate social feeds and map/location widgets across 5+ active client websites.',
+      'Develop custom features and API integrations beyond standard CMS/theme capabilities, including lead capture forms and multi-step booking flows, plus performance optimization work in coordination with SEO partners.',
+      'Operational Support: Maintain internal tooling, conduct QA and cross-browser testing pre-launch, and document completed builds and technical issues to keep the account team aligned.',
+    ],
+  },
+  {
     title: 'Mobile Developer',
     subtitle: 'Philippine Institute of Civil Engineers, USA Chapter',
     dates: 'Dec 2025 – Present',
