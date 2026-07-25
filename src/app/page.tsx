@@ -79,7 +79,7 @@ const projects: Entry[] = [
       'Applied agglomerative clustering to generate 332 labels in order to create multi-hot vectors representing ingredients for self-supervised learning.',
       'Optimized a transformer classifier that can predict presence of ingredients within an image with a ≈ 98% accuracy.',
     ],
-    link: 'https://6a6768.github.io/upgraded-computing-machine/reports/cs172b/main.html',
+    link: 'https://6a6768.github.io/archive/reports/cs172b/main.html',
   },
   {
     title: 'Diabetes Classification', 
