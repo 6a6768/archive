@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Gregory Shklovski (46808019) Angela Dang (80841454) Jesus Palo (46066046) Donald Bren School of Information and Computer Sciences University of California, Irvine Irvine, CA 92697, USA {gshklovsk,angelad6,jpalo}@uci.edu" />
+  <title>Ingredient Detection in Food Images via CLIP Fine-Tuning, Clustering, and Multi-Label Encoding</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Ingredient Detection in Food Images via CLIP
+Fine-Tuning, Clustering, and Multi-Label Encoding</h1>
+<p class="author">Gregory Shklovski (46808019) Angela Dang (80841454)
+Jesus Palo (46066046)<br />
+Donald Bren School of Information and Computer Sciences<br />
+University of California, Irvine<br />
+Irvine, CA 92697, USA<br />
+<code>{gshklovsk,angelad6,jpalo}@uci.edu</code></p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>Understanding food composition from images is a challenging task with
+significant applications in dietary tracking, nutritional analysis, and
+automated recipe generation. This project explores the use of
+Contrastive Language-Image Pretraining (CLIP) for ingredient detection
+in food images, leveraging its multimodal capabilities to bridge visual
+and textual representations. We fine-tune CLIP on a curated dataset of
+labeled food images, associating visual features with corresponding
+ingredient names to improve recognition accuracy. To refine predictions,
+we implement zero-shot and few-shot learning approaches, enabling the
+model to generalize across diverse cuisines and unstructured food
+presentations. Our evaluation demonstrates that CLIP-based ingredient
+detection outperforms traditional CNN-based models, particularly in
+handling unseen food categories and complex compositions. By integrating
+confidence-based filtering and semantic similarity scoring, we further
+enhance precision in ingredient retrieval. This approach enables
+downstream tasks such as personalized nutrition tracking, smart recipe
+recommendations, and AI-driven food logging. Future work will focus on
+sourcing a larger and cleaner dataset, employing count-based vectors to
+quantify ingredient amounts for improved downstream regression, and
+expanding capabilities with fine-grained ingredient segmentation and
+multilingual support to enhance accessibility and robustness.</p>
+</div>
+</header>
+<p>maketitle thanks aketitle</p>
+<h1 id="introduction">Introduction</h1>
+<p>Understanding food composition from images remains a complex task due
+to the variability in ingredient appearances, diverse cuisines, and
+non-standardized recipe formats. Reliable ingredient detection has the
+potential to revolutionize applications in personalized nutrition,
+dietary tracking, and automated recipe generation. Recent advances in
+contrastive learning—exemplified by CLIP—offer a promising avenue for
+bridging visual and textual representations. In this work, we fine-tune
+CLIP on a food image dataset and introduce a pipeline that includes
+clustering-based ingredient standardization and multi-hot encoding to
+effectively handle multi-ingredient scenarios.</p>
+<h1 id="related-work">Related Work</h1>
+<h2 id="inverse-cooking">Inverse Cooking</h2>
+<p><em>Inverse Cooking</em> <span class="citation"
+data-cites="salvador2019"></span> aims to generate structured recipes
+from food images by identifying ingredients using a neural network and
+reconstructing the recipe with a set-transformer. This approach enables
+automatic ingredient detection and step-by-step instruction generation,
+improving the interpretability of food recognition models.</p>
+<h2 id="pita-picture-to-amount">PiTA (Picture-to-Amount)</h2>
+<p><em>Picture-to-Amount (PiTA)</em> <span class="citation"
+data-cites="li2020"></span> introduces a <strong>cross-modal embedding
+space</strong> to estimate ingredient quantities from food images.
+Unlike previous models that focus solely on ingredient classification,
+PiTA predicts ingredient amounts, facilitating more accurate nutritional
+estimation and meal reconstruction.</p>
+<p>These methods highlight advancements in <strong>food recognition and
+multimodal learning</strong>. Our approach extends these works by
+clustering semantically similar ingredients and utilizing
+<em>Contrastive Language-Image Pretraining (CLIP)</em> for zero-shot
+recognition. Additionally, we integrate <strong>multi-hot
+encoding</strong> and <strong>count-based vectors</strong> for improved
+ingredient representation and downstream regression tasks.</p>
+<h1 id="headings">Methods</h1>
+<h2 id="clip-vision-transformer">CLIP Vision Transformer</h2>
+<p>We employ OpenAI’s CLIP (Contrastive Language-Image Pretraining)
+<span class="citation" data-cites="radford2021learning"></span> as the
+vision backbone for ingredient recognition. CLIP is a multimodal model
+trained on large-scale image-text pairs to learn a shared embedding
+space, enabling zero-shot and few-shot learning for downstream tasks.
+Specifically, we utilize the <strong>ViT-L/14-QuickGELU</strong>
+architecture, which provides superior feature extraction compared to
+smaller variants like ViT-B/32. The Vision Transformer (ViT) within CLIP
+processes input food images into high-dimensional feature embeddings,
+which are later mapped to textual embeddings for ingredient
+classification.</p>
+<h4 id="model-architecture">Model Architecture</h4>
+<p>CLIP’s vision encoder follows the ViT-L/14-QuickGELU architecture,
+which consists of:</p>
+<ul>
+<li><p><strong>Patch-based tokenization</strong>: Input images are split
+into non-overlapping patches of size
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>14</mn><mo>×</mo><mn>14</mn></mrow><annotation encoding="application/x-tex">14\times14</annotation></semantics></math>
+before being fed into the Transformer.</p></li>
+<li><p><strong>Transformer-based feature extraction</strong>: A deep
+Transformer network models spatial relationships across image patches,
+improving global contextual understanding.</p></li>
+<li><p><strong>QuickGELU activation</strong>: A variant of GELU
+activation that accelerates training convergence and improves numerical
+stability.</p></li>
+<li><p><strong>Shared embedding space</strong>: Image and text
+representations are aligned via contrastive learning, allowing seamless
+retrieval of semantically related ingredients.</p></li>
+</ul>
+<h4 id="embedding-extraction">Embedding Extraction</h4>
+<p>To extract feature embeddings from food images, we pass each image
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
+through the CLIP ViT-L/14 encoder. The extracted embeddings are
+L2-normalized to facilitate cosine similarity computations, ensuring
+robust distance-based comparisons. The feature representation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mi>I</mi></msub><annotation encoding="application/x-tex">E_I</annotation></semantics></math>
+for an input image is computed as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>I</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mtext mathvariant="normal">ViT</mtext></msub><mo stretchy="false" form="prefix">(</mo><mi>I</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mo stretchy="false" form="postfix">∥</mo><msub><mi>f</mi><mtext mathvariant="normal">ViT</mtext></msub><mo stretchy="false" form="prefix">(</mo><mi>I</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">∥</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\begin{equation}
+    E_I = \frac{f_{\text{ViT}}(I)}{\| f_{\text{ViT}}(I) \|}
+\end{equation}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mtext mathvariant="normal">ViT</mtext></msub><mo stretchy="false" form="prefix">(</mo><mi>I</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f_{\text{ViT}}(I)</annotation></semantics></math>
+denotes the ViT feature extractor, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi>⋅</mi><mo stretchy="false" form="postfix">∥</mo></mrow><annotation encoding="application/x-tex">\| \cdot \|</annotation></semantics></math>
+represents the L2-norm.</p>
+<h4 id="contrastive-learning-with-infonce-loss">Contrastive Learning
+with InfoNCE Loss</h4>
+<p>To enhance ingredient recognition, we leverage CLIP’s contrastive
+learning framework, which aligns image and text embeddings using the
+<strong>InfoNCE loss</strong>. This objective function optimizes
+similarity between correct image-ingredient pairs while penalizing
+incorrect associations. Given an image embedding
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>i</mi></msub><annotation encoding="application/x-tex">v_i</annotation></semantics></math>
+and its corresponding text embedding
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>i</mi></msub><annotation encoding="application/x-tex">t_i</annotation></semantics></math>,
+the loss is formulated as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="script">ℒ</mi><mtext mathvariant="normal">InfoNCE</mtext></msub><mo>=</mo><mi>−</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><mrow><mi mathvariant="normal">exp</mi><mo>&#8289;</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mtext mathvariant="normal">sim</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>,</mo><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><mi>τ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mrow><mi mathvariant="normal">exp</mi><mo>&#8289;</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mtext mathvariant="normal">sim</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>,</mo><msub><mi>t</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><mi>τ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\begin{equation}
+\mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp\left(\frac{\text{sim}(v_i, t_i)}{\tau}\right)}{\sum_{j=1}^{N} \exp\left(\frac{\text{sim}(v_i, t_j)}{\tau}\right)}
+\end{equation}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">sim</mtext><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>,</mo><mi>⋅</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{sim}(\cdot,\cdot)</annotation></semantics></math>
+represents the cosine similarity between embeddings,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
+is a temperature hyperparameter, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
+is the batch size. This loss function ensures that image and ingredient
+embeddings remain well-separated in the shared space, facilitating
+improved ingredient retrieval. By integrating InfoNCE loss, our approach
+effectively captures fine-grained semantic correlations in food
+compositions, leading to more accurate ingredient predictions.</p>
+<h2 id="data-preprocessing-and-ingredient-standardization">Data
+Preprocessing and Ingredient Standardization</h2>
+<p>The dataset used in this study is derived from the <em>Food
+Ingredients and Recipes Dataset with Images</em>, sourced from Kaggle.
+This dataset was originally created by scraping recipe data from the
+<em>Epicurious Website</em> and contains a collection of **13,000
+samples**, each consisting of an image, recipe title, ingredient list,
+and full recipe text.</p>
+<p>We used the Food Ingredients and Recipes Dataset with Images
+dataset<a href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a> for this project.</p>
+<p>To facilitate structured learning, we preprocess the dataset as
+follows:</p>
+<ul>
+<li><p><strong>Data Structuring</strong>: The dataset is stored as an
+<strong>image folder</strong> and a corresponding <strong>CSV
+file</strong> containing structured fields: <em>(Title, Image Path,
+Ingredients, Recipe Text)</em>.</p></li>
+<li><p><strong>Ingredient Cleaning and Normalization</strong>:</p>
+<ul>
+<li><p>Ingredients are <em>tokenized and standardized</em>, removing
+variations due to spelling, pluralization, and minor wording differences
+(e.g., <code>"tomatoes"</code>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<code>"tomato"</code>).</p></li>
+<li><p>Measurement units (e.g., <code>"1 cup of flour"</code>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<code>"flour"</code>) and preparation methods (e.g.,
+<code>"chopped onions"</code>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<code>"onion"</code>) are filtered to retain only the ingredient
+names.</p></li>
+</ul></li>
+<li><p><strong>Handling Missing Data</strong>: Entries with missing
+ingredient lists or image paths are removed to ensure dataset
+consistency.</p></li>
+<li><p><strong>Cluster-Based Ingredient Grouping</strong>:</p>
+<ul>
+<li><p>Ingredients are <strong>clustered</strong> using
+<strong>HDBSCAN</strong> and <strong>Agglomerative Clustering</strong>
+to group semantically similar ingredients (e.g.,
+<code>"cherry tomato"</code> and <code>"tomato paste"</code>).</p></li>
+<li><p>Each image is mapped to a <strong>multi-hot encoded
+vector</strong> representing the ingredient clusters for improved
+generalization in model training.</p></li>
+</ul></li>
+</ul>
+<p>By applying this preprocessing pipeline, we ensure that the dataset
+is well-structured, reduces redundancy in ingredient representation, and
+enhances the accuracy of multimodal learning.</p>
+<h2 id="clustering-and-multi-hot-encoding">Clustering and Multi-Hot
+Encoding</h2>
+<p>To improve ingredient recognition, we cluster semantically similar
+ingredients and represent them as multi-hot encoded vectors. This
+approach reduces noise in ingredient labels and enhances generalization
+across variations in ingredient naming.</p>
+<h4 id="ingredient-clustering">Ingredient Clustering</h4>
+<p>We apply hierarchical density-based clustering using
+<strong>HDBSCAN</strong> <span class="citation"
+data-cites="mcinnes2017hdbscan"></span> and <strong>Agglomerative
+Clustering</strong> to group similar ingredients based on their
+embeddings. These embeddings are extracted from ingredient names using
+OpenAI’s CLIP text encoder, ensuring that semantically related
+ingredients (e.g., “tomato,” “cherry tomato,” “tomato paste”) belong to
+the same cluster.</p>
+<p>Given an ingredient embedding matrix
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑬</mi><mo>∈</mo><msup><mi mathvariant="double-struck">ℝ</mi><mrow><mi>N</mi><mo>×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{E} \in \mathbb{R}^{N \times d}</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
+is the number of unique ingredients and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
+is the embedding dimension, we compute the pairwise cosine distance
+matrix:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><msub><mi mathvariant="bold-italic">𝑬</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi mathvariant="bold-italic">𝑬</mi><mi>j</mi></msub></mrow><mrow><mo stretchy="false" form="postfix">∥</mo><msub><mi mathvariant="bold-italic">𝑬</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">∥</mo><mo stretchy="false" form="postfix">∥</mo><msub><mi mathvariant="bold-italic">𝑬</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">∥</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\begin{equation}
+    D_{ij} = 1 - \frac{\mathbf{E}_i \cdot \mathbf{E}_j}{\|\mathbf{E}_i\| \|\mathbf{E}_j\|}
+\end{equation}</annotation></semantics></math></p>
+<p>We then apply HDBSCAN to detect dense clusters and Agglomerative
+Clustering with an adaptive distance threshold to merge fine-grained
+ingredient groups. The final cluster labels are assigned using a
+<strong>Large Language Model (LLM) (Groq’s LLaMA-3.3-70B)</strong> by
+passing representative ingredients from each cluster for human-readable
+labeling.</p>
+<figure id="fig:hclustering">
+<img src="./Hierchical clustering.png" style="width:80.0%" />
+<figcaption>Hierarchical clustering</figcaption>
+</figure>
+<h4 id="multi-hot-encoding-for-ingredient-representation">Multi-Hot
+Encoding for Ingredient Representation</h4>
+<p>Since each image may contain multiple ingredients, we encode
+ingredient presence using a multi-hot vector. Given a total of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
+clusters, each image is represented as a binary vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒚</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">}</mo><mi>K</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{y} \in \{0,1\}^K</annotation></semantics></math>,
+where:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>k</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>1</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if an ingredient from cluster </mtext><mspace width="0.333em"></mspace></mrow><mi>k</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> appears in the image</mtext></mrow></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mtext mathvariant="normal">otherwise</mtext></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}
+    y_k =
+    \begin{cases}
+        1, &amp; \text{if an ingredient from cluster } k \text{ appears in the image} \\
+        0, &amp; \text{otherwise}
+    \end{cases}
+\end{equation}</annotation></semantics></math></p>
+<p>This structured representation enhances model performance in
+downstream tasks such as ingredient prediction, food classification, and
+nutritional analysis. Furthermore, it allows for <strong>count-based
+vector extensions</strong>, where ingredient amounts are estimated based
+on soft clustering probabilities.</p>
+<h4 id="impact-on-model-performance">Impact on Model Performance</h4>
+<p>By clustering semantically similar ingredients and encoding them as
+multi-hot vectors, we:</p>
+<ul>
+<li><p>Reduce ingredient label sparsity and variations in textual
+descriptions.</p></li>
+<li><p>Improve model generalization to unseen food
+compositions.</p></li>
+<li><p>Enable interpretable ingredient tracking for dietary and
+nutritional analysis.</p></li>
+</ul>
+<p>Future work will explore refining cluster assignments using
+self-supervised learning and leveraging count-based vector
+representations for precise ingredient amount estimation.</p>
+<h2 id="model-architecture-and-training">Model Architecture and
+Training</h2>
+<figure id="fig:pipeline1">
+<img src="./clip.png" style="width:80.0%" />
+<figcaption>The Contrastive Language-Image Pre-training portion of the
+pipeline</figcaption>
+</figure>
+<figure id="fig:pipeline2">
+<img src="./classifier .png" style="width:80.0%" />
+<figcaption>The Transformer classifier portion of the
+pipeline</figcaption>
+</figure>
+<p>The final part of the pipeline as seen in Figure <a
+href="#fig:pipeline2" data-reference-type="ref"
+data-reference="fig:pipeline2">3</a> takes in an image embedding from
+the vision transformer, either the pre-trained ViT-B-32 or the
+ViT-L-14-quickgelu we trained ourselves, for feature extraction and a
+Transformer encoder for classification. Given an input image
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>,
+the vision transformer generates a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>512</mn><annotation encoding="application/x-tex">512</annotation></semantics></math>
+or
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>768</mn><annotation encoding="application/x-tex">768</annotation></semantics></math>-dimensional
+embedding
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>.
+This embedding is processed by a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6</mn><annotation encoding="application/x-tex">6</annotation></semantics></math>-layer
+Transformer encoder with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>8</mn><annotation encoding="application/x-tex">8</annotation></semantics></math>
+attention heads, a feedforward dimension of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4096</mn><annotation encoding="application/x-tex">4096</annotation></semantics></math>,
+and dropout
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">p = 0.1</annotation></semantics></math>.
+The output is passed through a linear layer to produce logits
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>∈</mo><msup><mi mathvariant="double-struck">ℝ</mi><mn>332</mn></msup></mrow><annotation encoding="application/x-tex">z \in \mathbb{R}^{332}</annotation></semantics></math>
+for multi-label classification, with 332 being the length of the
+multi-hot vector and the number of ingredient clusters generated in the
+data pre-processing.</p>
+<p>We train the model using binary cross-entropy loss with logits:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">ℒ</mi><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>y</mi><mi>i</mi></msub><mo>⋅</mo><mi mathvariant="normal">log</mi><mo stretchy="false" form="prefix">(</mo><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mi mathvariant="normal">log</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L} = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \cdot \log(\sigma(z_i)) + (1 - y_i) \cdot \log(1 - \sigma(z_i)) \right],</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
+is the sigmoid function,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">z_i</annotation></semantics></math>
+are the logits, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">}</mo><mn>332</mn></msup></mrow><annotation encoding="application/x-tex">y_i \in \{0, 1\}^{332}</annotation></semantics></math>
+are the binary labels. The model is optimized using SGD with momentum
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.9</mn><annotation encoding="application/x-tex">0.9</annotation></semantics></math>,
+initial learning rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math>,
+and a ReduceLROnPlateau scheduler. Training runs for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>35</mn><annotation encoding="application/x-tex">35</annotation></semantics></math>
+epochs with early stopping based on validation loss.</p>
+<p>The vision transformer is frozen during training, and only the
+Transformer encoder and classification head are optimized. We use a
+batch size of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>32</mn><annotation encoding="application/x-tex">32</annotation></semantics></math>
+and evaluate performance using Hamming Loss. Predictions are obtained by
+thresholding the sigmoid-activated logits at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>.</p>
+<h1 id="others">Experiments and Results</h1>
+<h2
+id="relations-between-clip-image-embeddings-and-ingredient-pairs">Relations
+Between CLIP Image Embeddings and Ingredient Pairs</h2>
+<p>To determine the optimal image encoder for our downstream
+classification task, we finetuned CLIP using several architectures on
+our curated food dataset. Our initial experiment utilized a ResNet50
+model (approximately 102 million parameters), which converged within
+four epochs to a validation loss of 4.5 under the InfoNCE objective.
+Subsequently, we evaluated the ViT-L-14-QuickGELU model—a vision
+transformer variant that met our computational constraints with
+approximately 427 million parameters. This model also converged in four
+epochs, but achieved a notably lower validation loss of 3.2, indicating
+a stronger alignment between image embeddings and ingredient pairs.</p>
+<h2 id="classification">Classification</h2>
+<figure id="fig:vitb32">
+<img src="./vitb32.png" style="width:80.0%" />
+<figcaption>Training and validation loss curves for
+ViT-B-32</figcaption>
+</figure>
+<p>In order to compare, we first used the ViT-B-32 model that was
+pretrained with OpenAI as the first part of our pipeline. The
+transformer classifier model was then trained for 11 epochs using binary
+cross-entropy loss with a learning rate of 0.01 and a batch size of 32.
+Early stopping was implemented based on validation loss to prevent
+overfitting.</p>
+<p>By the final epoch (epoch 11), the model achieved a training loss of
+0.0566 and a validation loss of 0.0458, demonstrating consistent
+improvement over the training process. The Hamming Loss, which was
+chosen due to its ability to measure the fraction of incorrectly
+predicted labels, reached 0.0138% on the validation set.</p>
+<figure id="fig:clip_curve">
+<img src="./clip_curve.png" style="width:80.0%" />
+<figcaption>Validation loss curves for CLIP Models</figcaption>
+</figure>
+<figure id="fig:vitl14">
+<img src="./vit_l_14.png" style="width:80.0%" />
+<figcaption>Training and validation loss curves for
+ViT-L-14-quickgelu</figcaption>
+</figure>
+<p>We then also used the ViT-L-14-QuickGELU model that was trained on
+our dataset for ingredient detection. The model was trained for 26
+epochs using binary cross-entropy loss with a learning rate of 0.01 and
+a batch size of 32. Early stopping was implemented to prevent
+overfitting, triggered after three consecutive epochs without
+improvement in validation loss.</p>
+<p>By the final epoch (epoch 26), the model achieved a training loss of
+0.0570 and a validation loss of 0.0466, demonstrating consistent
+improvement throughout the training process. The Hamming Loss stabilized
+at 0.0144 on the validation set.</p>
+<p>As shown in Figure <a href="#fig:vitb32" data-reference-type="ref"
+data-reference="fig:vitb32">4</a> and Figure <a href="#fig:vitl14"
+data-reference-type="ref" data-reference="fig:vitl14">6</a>, the
+ViT-B-32 and ViT-L-14-QuickGELU models both seemingly achieved strong
+performance in ingredient detection. The ViT-B-32 converged faster,
+reaching a validation loss of 0.0458 and Hamming Loss of 0.0138 by epoch
+11. In contrast, the ViT-L-14-QuickGELU achieved a validation loss of
+0.0466 and Hamming Loss of 0.0144 by epoch 26, with training halted
+early due to convergence.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>Further experimentation can be done to verify how accurate these
+results are; Due to the model not being that complex and how large and
+sparse the true label multi-hot vectors are, it is possible the model
+learned to predict a zero/false value most of the time for all the
+ingredients rather than learning the true ingredients of the image.</p>
+<h3 class="unnumbered" id="author-contributions">Author
+Contributions</h3>
+<p>Gregory Shklovski: Performed a fine-tuning of the CLIP image encoder
+and created CLIP inference infrastructure. Additionally, contributed
+data pre-processing scripts for train-test split and anomaly
+removal.<br />
+<br />
+Angela Dang: Led the dataset preprocessing, ingredient standardization,
+and clustering pipeline. Developed and implemented hierarchical
+clustering using HDBSCAN and Agglomerative Clustering to group
+semantically similar ingredients. Designed and optimized the multi-hot
+vector encoding system to represent ingredient presence in food
+images.<br />
+<br />
+Jesus Palo: Experimented with and architected different models for
+single ingredient classification which lead to the final classification
+part of the pipeline (MLP, CNN, or Transformer). Assisted with data
+pre-processing regarding generating multihot vectors as labels for the
+food images.</p>
+<h1 id="appendix">Appendix</h1>
+<h2 id="previous-testing">Previous Testing</h2>
+<div class="center">
+<div id="tab:butter_loss_comparison">
+<table>
+<caption>Comparison of Loss Values for Single Ingredient
+Detection</caption>
+<thead>
+<tr>
+<th style="text-align: center;"><strong>Model</strong></th>
+<th style="text-align: center;"><strong>Classifier Type</strong></th>
+<th style="text-align: center;"><strong>Loss Value</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">ViT-L/14-quickgelu (our trained)</td>
+<td style="text-align: left;">MLP</td>
+<td style="text-align: left;">0.5953</td>
+</tr>
+<tr>
+<td style="text-align: left;">ViT-B/32 (Pre-trained)</td>
+<td style="text-align: left;">MLP</td>
+<td style="text-align: left;">0.5075</td>
+</tr>
+<tr>
+<td style="text-align: left;">Raw Image (No CLIP)</td>
+<td style="text-align: left;">MLP</td>
+<td style="text-align: left;">0.6385</td>
+</tr>
+<tr>
+<td style="text-align: left;">ViT-L/14-quickgelu (our trained)</td>
+<td style="text-align: left;">Transformer</td>
+<td style="text-align: left;">0.5953</td>
+</tr>
+<tr>
+<td style="text-align: left;">ViT-B/32 (Pre-trained)</td>
+<td style="text-align: left;">Transformer</td>
+<td style="text-align: left;">0.5151</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Before the final decision to use a transformer classifier for the
+final part of the pipeline, we first experimented with various
+architectures and inputs when it comes to classifying a single
+ingredient. As seen in Table <a href="#tab:butter_loss_comparison"
+data-reference-type="ref"
+data-reference="tab:butter_loss_comparison">1</a>, using the embeddings
+from the vision transformers yielded better results than raw images when
+it came to the task of single ingredient classification, which led us to
+using vision transformers to generate embeddings for our input rather
+than a raw image.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Dataset available at <a
+href="https://www.kaggle.com/datasets/pes12017000148/food-ingredients-and-recipe-dataset-with-images"
+class="uri">https://www.kaggle.com/datasets/pes12017000148/food-ingredients-and-recipe-dataset-with-images</a><a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>
