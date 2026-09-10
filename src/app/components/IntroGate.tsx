@@ -18,15 +18,22 @@ export default function IntroGate({ onEnter }: IntroGateProps) {
   }, [onEnter]);
 
   return (
-    <div className="intro-gate" role="dialog" aria-label="Enter archive">
+    <div className="intro-gate" role="dialog" aria-label="Enter portfolio">
       <button type="button" className="intro-gate__hit" onClick={onEnter}>
-        <div className="intro-gate__crosshair" aria-hidden="true" />
-        <p className="intro-gate__mark">Archive</p>
+        <div className="intro-gate__frame" aria-hidden="true">
+          <span className="hud-corner hud-corner--tl" />
+          <span className="hud-corner hud-corner--tr" />
+          <span className="hud-corner hud-corner--bl" />
+          <span className="hud-corner hud-corner--br" />
+        </div>
+        <p className="intro-gate__mark">Portfolio</p>
         <h1 className="intro-gate__title">Jesus Rafael Palo</h1>
         <p className="intro-gate__line">
-          Work from the tangent edge of systems and models.
+          Work across systems, models, and the web.
         </p>
-        <span className="intro-gate__cta">Enter</span>
+        <span className="intro-gate__cta" aria-hidden="true">
+          →
+        </span>
         <span className="intro-gate__hint">Click or press any key</span>
       </button>
     </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Spectral, IBM_Plex_Sans } from 'next/font/google';
+import { Spectral, IBM_Plex_Sans, Share_Tech_Mono } from 'next/font/google';
 import './globals.css';
 
 const spectral = Spectral({
@@ -14,6 +14,13 @@ const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   variable: '--font-body',
+  display: 'swap',
+});
+
+const shareTech = Share_Tech_Mono({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-hud',
   display: 'swap',
 });
 
@@ -35,7 +42,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spectral.variable} ${plexSans.variable}`}>
+    <html
+      lang="en"
+      className={`${spectral.variable} ${plexSans.variable} ${shareTech.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

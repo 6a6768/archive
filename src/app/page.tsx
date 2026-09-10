@@ -184,92 +184,107 @@ export default function Home() {
       <Atmosphere />
       <SiteShell>
         <main className="page">
-          <header className="forum-banner">
-            <p className="forum-mark">Archive · 6a6768</p>
-            <div className="forum-title">Jesus Rafael Palo</div>
-            <p className="forum-subtitle">
-              jesus.rafaelpalo@gmail.com · 619-746-5345
-            </p>
-          </header>
+          <div className="hud-stage">
+            <div className="hud-stage__frame" aria-hidden="true">
+              <span className="hud-corner hud-corner--tl" />
+              <span className="hud-corner hud-corner--tr" />
+              <span className="hud-corner hud-corner--bl" />
+              <span className="hud-corner hud-corner--br" />
+              <span className="hud-rivet hud-rivet--tl" />
+              <span className="hud-rivet hud-rivet--tr" />
+              <span className="hud-rivet hud-rivet--bl" />
+              <span className="hud-rivet hud-rivet--br" />
+            </div>
+            <div className="hud-rail hud-rail--left" aria-hidden="true" />
+            <div className="hud-rail hud-rail--right" aria-hidden="true" />
 
-          <div className="layout">
-            <aside className="sidebar">
-              <div className="sidebar-title">Index</div>
-              <ul className="sidebar-list">
-                <li>
-                  <a href="#about">
-                    <span className="nav-code">01</span> Subject
-                    <span className="nav-plain">About</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#experience">
-                    <span className="nav-code">02</span> Record
-                    <span className="nav-plain">Experience</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#projects">
-                    <span className="nav-code">03</span> Artifacts
-                    <span className="nav-plain">Projects</span>
-                  </a>
-                </li>
-              </ul>
-              <div className="sidebar-section">
-                <div className="sidebar-subtitle">Record</div>
-                <ul className="sidebar-list sidebar-list--nested">
-                  {experiences.map((exp) => (
-                    <li key={exp.title}>
-                      <a href={`#experience-${slugify(exp.title)}`}>
-                        {exp.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+            <div className="hud-status">
+              <span>Online</span>
+              <span className="hud-status__pulse" />
+              <span>Portfolio</span>
+            </div>
+
+            <header className="forum-banner">
+              <div className="forum-title">Jesus Rafael Palo</div>
+              <p className="forum-subtitle">
+                jesus.rafaelpalo@gmail.com · 619-746-5345
+              </p>
+            </header>
+
+            <nav className="hud-nav" aria-label="Primary">
+              <a className="hud-nav__btn" href="#about">
+                <span className="nav-code">01</span>
+                <span className="hud-nav__label">About</span>
+              </a>
+              <a className="hud-nav__btn" href="#experience">
+                <span className="nav-code">02</span>
+                <span className="hud-nav__label">Experience</span>
+              </a>
+              <a className="hud-nav__btn" href="#projects">
+                <span className="nav-code">03</span>
+                <span className="hud-nav__label">Projects</span>
+              </a>
+            </nav>
+
+            <div className="layout">
+              <aside className="sidebar">
+                <div className="sidebar-title">Navigation</div>
+                <div className="sidebar-section sidebar-section--flush">
+                  <div className="sidebar-subtitle">Experience</div>
+                  <ul className="sidebar-list sidebar-list--nested">
+                    {experiences.map((exp) => (
+                      <li key={exp.title}>
+                        <a href={`#experience-${slugify(exp.title)}`}>
+                          {exp.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="sidebar-section">
+                  <div className="sidebar-subtitle">Projects</div>
+                  <ul className="sidebar-list sidebar-list--nested">
+                    {projects.map((proj) => (
+                      <li key={proj.title}>
+                        <a href={`#project-${slugify(proj.title)}`}>
+                          {proj.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </aside>
+
+              <div className="content">
+                <section className="forum-section" id="about">
+                  <SectionHeading code="01" title="About" />
+                  <div className="forum-section__body">
+                    <div className="about-text">{aboutText}</div>
+                  </div>
+                </section>
+
+                <section className="forum-section" id="experience">
+                  <SectionHeading code="02" title="Experience" />
+                  <div className="forum-section__body">
+                    <EntryList
+                      items={experiences}
+                      emptyLabel="(List roles or milestones.)"
+                      idPrefix="experience"
+                    />
+                  </div>
+                </section>
+
+                <section className="forum-section" id="projects">
+                  <SectionHeading code="03" title="Projects" />
+                  <div className="forum-section__body">
+                    <EntryList
+                      items={projects}
+                      emptyLabel="(Add your projects.)"
+                      idPrefix="project"
+                    />
+                  </div>
+                </section>
               </div>
-              <div className="sidebar-section">
-                <div className="sidebar-subtitle">Artifacts</div>
-                <ul className="sidebar-list sidebar-list--nested">
-                  {projects.map((proj) => (
-                    <li key={proj.title}>
-                      <a href={`#project-${slugify(proj.title)}`}>
-                        {proj.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </aside>
-
-            <div className="content">
-              <section className="forum-section" id="about">
-                <SectionHeading code="01 · Subject" title="About" />
-                <div className="forum-section__body">
-                  <div className="about-text">{aboutText}</div>
-                </div>
-              </section>
-
-              <section className="forum-section" id="experience">
-                <SectionHeading code="02 · Record" title="Experience" />
-                <div className="forum-section__body">
-                  <EntryList
-                    items={experiences}
-                    emptyLabel="(List roles or milestones.)"
-                    idPrefix="experience"
-                  />
-                </div>
-              </section>
-
-              <section className="forum-section" id="projects">
-                <SectionHeading code="03 · Artifacts" title="Projects" />
-                <div className="forum-section__body">
-                  <EntryList
-                    items={projects}
-                    emptyLabel="(Add your projects.)"
-                    idPrefix="project"
-                  />
-                </div>
-              </section>
             </div>
           </div>
         </main>
@@ -277,3 +292,4 @@ export default function Home() {
     </>
   );
 }
+
