@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const repoBasePath = process.env.NEXT_PUBLIC_BASE_PATH;
+const repoBasePath =
+  process.env.NEXT_PUBLIC_BASE_PATH || process.env.BASE_PATH || undefined;
 const normalizedBasePath = repoBasePath
   ? repoBasePath.startsWith('/')
     ? repoBasePath

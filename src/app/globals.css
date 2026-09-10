@@ -677,14 +677,7 @@ a:hover {
   z-index: 40;
   display: grid;
   place-items: center;
-  background:
-    linear-gradient(
-      125deg,
-      #0d1520 0%,
-      #152033 30%,
-      rgba(255, 255, 255, 0.4) 52%,
-      #ffffff 62%
-    );
+  background: #ffffff;
   animation: gate-in 0.8s var(--ease-slow) both;
 }
 

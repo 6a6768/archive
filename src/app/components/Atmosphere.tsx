@@ -1,6 +1,6 @@
 'use client';
 
-const assetBase = process.env.NEXT_PUBLIC_BASE_PATH || '';
+import metalheartRef from '../../assets/metalheart-ref.png';
 
 export default function Atmosphere() {
   return (
@@ -9,7 +9,7 @@ export default function Atmosphere() {
       <div
         className="atmosphere__photo"
         style={{
-          backgroundImage: `url(${assetBase}/metalheart-ref.png)`,
+          backgroundImage: `url(${metalheartRef.src})`,
         }}
       />
       <div className="atmosphere__bloom" />
@@ -108,7 +108,6 @@ export default function Atmosphere() {
             fill="#d0d6dc"
             opacity="0.14"
           />
-          {/* Soft parallelogram slab behind mark cluster */}
           <path
             d="M1180 520 L1520 480 L1500 620 L1160 650 Z"
             fill="#d8dee4"
@@ -138,7 +137,6 @@ export default function Atmosphere() {
         </g>
       </svg>
 
-      {/* Emblem blocks — far right, beside the nav (not behind it) */}
       <div className="atmosphere__emblem" aria-hidden="true">
         <svg viewBox="0 0 120 130" className="atmosphere__emblem-svg">
           <path
@@ -154,13 +152,11 @@ export default function Atmosphere() {
         </svg>
       </div>
 
-      {/* Far-right accent rings — sit outside/beside the nav column */}
       <div className="atmosphere__edge-rings" aria-hidden="true">
         <span />
         <span />
       </div>
 
-      {/* Right-edge column like the reference logo strip */}
       <div className="atmosphere__side">
         <span className="atmosphere__side-line" />
         <span className="atmosphere__side-line atmosphere__side-line--mid" />
