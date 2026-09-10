@@ -1,6 +1,6 @@
 :root {
-  --bg: #e8ecf0;
-  --bg-soft: #dfe4ea;
+  --bg: #ffffff;
+  --bg-soft: #f4f6f8;
   --panel: rgba(255, 255, 255, 0.78);
   --panel-solid: #ffffff;
   --metal-top: #f7f8fa;
@@ -95,13 +95,18 @@ a:hover {
   margin: 0 auto;
   padding: 28px 24px 56px;
   display: grid;
-  grid-template-columns: minmax(140px, 180px) minmax(0, 680px);
+  grid-template-columns: minmax(140px, 180px) minmax(0, 680px) minmax(140px, 180px);
   gap: 22px;
   align-items: start;
   justify-content: center;
 }
 
-/* Left shape navigation — outside the central stage */
+.page__spacer {
+  /* Balances the right nav so the stage stays visually centered */
+  min-height: 1px;
+}
+
+/* Right shape navigation — outside the central stage */
 .shape-nav {
   position: sticky;
   top: 20px;
@@ -117,12 +122,12 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 14px 18px 14px 16px;
+  padding: 14px 16px 14px 18px;
   text-decoration: none;
   color: #f2f5f7;
-  background: linear-gradient(145deg, #2a3344 0%, #1a2130 70%);
-  clip-path: polygon(0 0, 92% 0, 100% 28%, 100% 100%, 8% 100%, 0 72%);
-  box-shadow: 8px 10px 24px rgba(26, 33, 48, 0.18);
+  background: linear-gradient(215deg, #2a3344 0%, #1a2130 70%);
+  clip-path: polygon(8% 0, 100% 0, 100% 72%, 92% 100%, 0 100%, 0 28%);
+  box-shadow: -8px 10px 24px rgba(26, 33, 48, 0.18);
   transition:
     transform 0.35s var(--ease-slow),
     filter 0.35s var(--ease-slow),
@@ -130,12 +135,12 @@ a:hover {
 }
 
 .shape-nav__item--alt {
-  clip-path: polygon(8% 0, 100% 0, 100% 72%, 92% 100%, 0 100%, 0 28%);
-  background: linear-gradient(160deg, #3a4656 0%, #1a2130 75%);
+  clip-path: polygon(0 0, 92% 0, 100% 28%, 100% 100%, 8% 100%, 0 72%);
+  background: linear-gradient(200deg, #3a4656 0%, #1a2130 75%);
 }
 
 .shape-nav__item--primary:hover {
-  transform: translateX(6px);
+  transform: translateX(-6px);
   filter: brightness(1.08);
   color: #ffffff;
   text-shadow: none;
@@ -160,7 +165,7 @@ a:hover {
   flex-direction: column;
   gap: 6px;
   margin: 2px 0 6px;
-  padding-left: 6px;
+  padding-right: 6px;
 }
 
 .shape-nav__chip {
@@ -170,9 +175,10 @@ a:hover {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(220, 226, 232, 0.88));
   border: 1px solid rgba(26, 33, 48, 0.16);
   padding: 8px 12px;
-  clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%);
+  clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 100%);
   font-size: 0.72rem;
   line-height: 1.3;
+  text-align: right;
   transition:
     transform 0.3s var(--ease-slow),
     background 0.3s var(--ease-slow),
@@ -188,13 +194,13 @@ a:hover {
 
 .shape-nav__chip--dark {
   color: #e8eef2;
-  background: linear-gradient(145deg, #3a4656, #243040);
+  background: linear-gradient(215deg, #3a4656, #243040);
   border-color: transparent;
-  clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%);
 }
 
 .shape-nav__chip:hover {
-  transform: translateX(4px);
+  transform: translateX(-4px);
   color: var(--acid);
   text-shadow: none;
 }
@@ -222,16 +228,66 @@ a:hover {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background: #e8ecf0;
+  background: #ffffff;
 }
 
 .atmosphere__wash {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 40% at 15% 10%, rgba(255, 255, 255, 0.95), transparent 60%),
-    radial-gradient(ellipse 45% 35% at 85% 75%, rgba(26, 33, 48, 0.08), transparent 55%),
-    linear-gradient(180deg, #f2f4f6 0%, #e8ecf0 45%, #dfe4ea 100%);
+    linear-gradient(
+      125deg,
+      #0d1520 0%,
+      #152033 18%,
+      rgba(232, 238, 244, 0.28) 40%,
+      #ffffff 52%,
+      #ffffff 100%
+    );
+}
+
+.atmosphere__photo {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  /* Zoom out so more of the left artwork is visible */
+  background-size: 78% auto;
+  background-position: -4% 42%;
+  -webkit-mask-image: linear-gradient(
+    115deg,
+    #000 0%,
+    #000 32%,
+    rgba(0, 0, 0, 0.6) 42%,
+    transparent 54%
+  );
+  mask-image: linear-gradient(
+    115deg,
+    #000 0%,
+    #000 32%,
+    rgba(0, 0, 0, 0.6) 42%,
+    transparent 54%
+  );
+  opacity: 0.95;
+  filter: saturate(0.85) contrast(1.05);
+}
+
+@media (max-width: 768px) {
+  .atmosphere__photo {
+    background-size: cover;
+    background-position: 18% 35%;
+  }
+}
+
+.atmosphere__bloom {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 55% 70% at 42% 40%,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.2) 35%,
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+  opacity: 0.85;
 }
 
 .atmosphere__art {
@@ -241,260 +297,141 @@ a:hover {
   height: 100%;
 }
 
-.atmosphere__wing {
-  transform-origin: center;
-  animation: wing-drift 48s ease-in-out infinite alternate;
+.atmosphere__dark-mass {
+  animation: dark-breathe 48s ease-in-out infinite alternate;
 }
 
-.atmosphere__wing--b {
-  animation-duration: 56s;
-  animation-delay: -8s;
+.atmosphere__girders {
+  animation: girder-drift 56s ease-in-out infinite alternate;
+  transform-origin: 30% 60%;
 }
 
-.atmosphere__wing--c {
-  animation-duration: 62s;
-  animation-delay: -14s;
+.atmosphere__right-shapes {
+  animation: right-drift 50s ease-in-out infinite alternate;
+  transform-origin: 80% 60%;
 }
 
-.atmosphere__ribbon {
-  animation: ribbon-drift 40s ease-in-out infinite alternate;
+.atmosphere__mark-cluster {
+  animation: mark-fade 8s ease-in-out infinite alternate;
 }
 
-.atmosphere__ribbon--slow {
-  animation-duration: 54s;
-  animation-delay: -10s;
+@keyframes dark-breathe {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.92;
+  }
 }
 
-.atmosphere__ribbon--acid {
-  animation-duration: 36s;
-  animation-delay: -4s;
+@keyframes girder-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(12px, -10px, 0) scale(1.02);
+  }
 }
 
-.atmosphere__glass {
-  animation: glass-drift 44s ease-in-out infinite alternate;
-}
-
-.atmosphere__glass--b {
-  animation-duration: 52s;
-  animation-delay: -12s;
-}
-
-.atmosphere__shards {
-  animation: shard-drift 60s ease-in-out infinite alternate;
-  transform-origin: center;
-}
-
-.atmosphere__floaters {
-  position: absolute;
-  inset: 0;
-}
-
-.atmosphere__floater {
-  position: absolute;
-  background: #1a2130;
-  opacity: 0.18;
-  animation: floater-drift 28s ease-in-out infinite alternate;
-}
-
-.atmosphere__floater--1 {
-  width: 120px;
-  height: 28px;
-  top: 12%;
-  left: 8%;
-  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
-  animation-duration: 32s;
-}
-
-.atmosphere__floater--2 {
-  width: 80px;
-  height: 80px;
-  top: 28%;
-  right: 22%;
-  opacity: 0.12;
-  clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%);
-  animation-duration: 40s;
-  animation-delay: -6s;
-}
-
-.atmosphere__floater--3 {
-  width: 160px;
-  height: 18px;
-  bottom: 22%;
-  left: 30%;
-  opacity: 0.16;
-  transform: skewX(-18deg);
-  animation-duration: 36s;
-  animation-delay: -10s;
-}
-
-.atmosphere__floater--4 {
-  width: 54px;
-  height: 54px;
-  bottom: 14%;
-  right: 30%;
-  opacity: 0.14;
-  clip-path: polygon(0 20%, 80% 0, 100% 80%, 20% 100%);
-  animation-duration: 44s;
-  animation-delay: -16s;
-}
-
-.atmosphere__floater--5 {
-  width: 100px;
-  height: 12px;
-  top: 58%;
-  left: 12%;
-  background: #3d7a72;
-  opacity: 0.22;
-  transform: skewX(-12deg);
-  animation-duration: 30s;
-  animation-delay: -3s;
-}
-
-@keyframes wing-drift {
+@keyframes right-drift {
   from {
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-18px, 12px, 0);
+    transform: translate3d(-10px, 8px, 0);
   }
 }
 
-@keyframes ribbon-drift {
+@keyframes mark-fade {
   from {
-    transform: translate3d(0, 0, 0);
+    opacity: 0.85;
   }
   to {
-    transform: translate3d(24px, -10px, 0);
+    opacity: 1;
   }
 }
 
-@keyframes glass-drift {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-14px, 8px, 0);
-  }
-}
-
-@keyframes shard-drift {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(10px, -8px, 0);
-  }
-}
-
-@keyframes floater-drift {
-  from {
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-  to {
-    transform: translate3d(16px, -12px, 0) rotate(2deg);
-  }
-}
-
-/* Side strip — darker panels like inspiration column marks */
+/* Right strip — sparse white column like the reference */
 .atmosphere__side {
   position: absolute;
   top: 0;
   right: 0;
-  width: min(160px, 18vw);
+  width: min(168px, 16vw);
   height: 100%;
-  border-left: 1px solid rgba(26, 33, 48, 0.18);
+  border-left: 1px solid rgba(176, 186, 196, 0.45);
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(232, 236, 240, 0.55) 40%,
-    rgba(26, 33, 48, 0.12) 100%
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.72) 35%,
+    rgba(255, 255, 255, 0.95) 100%
   );
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 .atmosphere__side-line {
   position: absolute;
   left: 0;
-  top: 18%;
-  width: 55%;
+  top: 16%;
+  width: 48%;
   height: 1px;
-  background: rgba(26, 33, 48, 0.35);
+  background: #c5ced6;
 }
 
 .atmosphere__side-line--mid {
-  top: 48%;
+  top: 46%;
   width: 100%;
-}
-
-.atmosphere__side-line--low {
-  top: 72%;
-  width: 70%;
 }
 
 .atmosphere__side-mark {
   position: absolute;
-  right: 10px;
-  top: calc(48% - 7px);
+  right: 12px;
+  top: calc(46% - 7px);
   font-family: var(--font-hud), 'Share Tech Mono', monospace;
   font-size: 0.7rem;
-  color: rgba(26, 33, 48, 0.45);
+  color: #a8b2bc;
 }
 
 .atmosphere__side-rings {
   position: absolute;
-  left: 18px;
-  top: 54%;
+  left: 22px;
+  top: 52%;
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .atmosphere__side-rings span {
   width: 22px;
   height: 22px;
-  border: 1.5px solid rgba(26, 33, 48, 0.4);
+  border: 1.5px solid #b0bac4;
   border-radius: 50%;
   background: radial-gradient(
     circle,
     transparent 40%,
-    rgba(26, 33, 48, 0.35) 41%,
-    rgba(26, 33, 48, 0.35) 48%,
+    #b0bac4 41%,
+    #b0bac4 48%,
     transparent 49%
   );
 }
 
 .atmosphere__side-brand {
   position: absolute;
-  left: 16px;
-  right: 16px;
-  top: 62%;
-  height: 48px;
+  left: 18px;
+  right: 18px;
+  top: 60%;
+  height: 56px;
   background: #1a2130;
-  clip-path: polygon(0 18%, 72% 0, 100% 0, 100% 100%, 0 100%);
-  opacity: 0.9;
+  clip-path: polygon(0 22%, 68% 0, 100% 0, 100% 100%, 0 100%);
 }
 
-.atmosphere__side-ticks {
+.atmosphere__side-rule {
   position: absolute;
-  left: 14px;
-  top: 22%;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.atmosphere__side-ticks i {
-  display: block;
-  width: 18px;
-  height: 2px;
-  background: rgba(26, 33, 48, 0.35);
-}
-
-.atmosphere__side-ticks i:nth-child(2) {
-  width: 12px;
-  background: #3d7a72;
-}
-
-.atmosphere__side-ticks i:nth-child(4) {
-  width: 14px;
+  left: 18px;
+  top: 60%;
+  width: 42%;
+  height: 1px;
+  background: #c5ced6;
+  transform: translateY(-18px);
 }
 
 .atmosphere__side-panel {
@@ -502,25 +439,14 @@ a:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 32%;
+  height: 30%;
   background: linear-gradient(
-    160deg,
-    rgba(26, 33, 48, 0.82) 0%,
-    rgba(36, 48, 64, 0.55) 45%,
-    rgba(26, 33, 48, 0.25) 100%
+    155deg,
+    rgba(200, 208, 216, 0.45) 0%,
+    rgba(232, 236, 240, 0.2) 55%,
+    rgba(255, 255, 255, 0.05) 100%
   );
-  clip-path: polygon(12% 0, 100% 18%, 100% 100%, 0 100%);
-}
-
-.atmosphere__side-shard {
-  position: absolute;
-  right: -10%;
-  top: 34%;
-  width: 70%;
-  height: 70px;
-  background: linear-gradient(135deg, #1a2130 0%, #2a3344 100%);
-  clip-path: polygon(0 30%, 100% 0, 100% 70%, 0 100%);
-  opacity: 0.55;
+  clip-path: polygon(10% 0, 100% 16%, 100% 100%, 0 100%);
 }
 
 /* Shared HUD corners / rivets */
@@ -735,9 +661,13 @@ a:hover {
   display: grid;
   place-items: center;
   background:
-    radial-gradient(ellipse 50% 40% at 75% 20%, rgba(26, 33, 48, 0.12), transparent 55%),
-    radial-gradient(ellipse 40% 35% at 10% 80%, rgba(26, 33, 48, 0.1), transparent 50%),
-    #e8ecf0;
+    linear-gradient(
+      125deg,
+      #0d1520 0%,
+      #152033 30%,
+      rgba(255, 255, 255, 0.4) 52%,
+      #ffffff 62%
+    );
   animation: gate-in 0.8s var(--ease-slow) both;
 }
 
@@ -1120,17 +1050,30 @@ a:hover {
     padding: 14px 10px 36px;
   }
 
+  .page__spacer {
+    display: none;
+  }
+
   .shape-nav {
     position: static;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
     padding-top: 0;
+    order: -1;
   }
 
   .shape-nav__item--primary {
     flex: 1 1 30%;
     min-width: 100px;
+  }
+
+  .shape-nav__item--primary:hover {
+    transform: translateY(-2px);
+  }
+
+  .shape-nav__chip {
+    text-align: left;
   }
 
   .shape-nav__cluster {
@@ -1139,7 +1082,7 @@ a:hover {
 
   .atmosphere__side {
     width: 72px;
-    opacity: 0.7;
+    opacity: 0.25;
   }
 }
 
@@ -1182,9 +1125,5 @@ a:hover {
   *::after {
     animation: none !important;
     transition: none !important;
-  }
-
-  .atmosphere__floaters {
-    display: none;
   }
 }

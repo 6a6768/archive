@@ -184,50 +184,7 @@ export default function Home() {
       <Atmosphere />
       <SiteShell>
         <main className="page">
-          <nav className="shape-nav" aria-label="Primary">
-            <a className="shape-nav__item shape-nav__item--primary" href="#about">
-              <span className="shape-nav__code">01</span>
-              <span className="shape-nav__label">About</span>
-            </a>
-            <a
-              className="shape-nav__item shape-nav__item--primary shape-nav__item--alt"
-              href="#experience"
-            >
-              <span className="shape-nav__code">02</span>
-              <span className="shape-nav__label">Experience</span>
-            </a>
-            <div className="shape-nav__cluster">
-              {experiences.map((exp) => (
-                <a
-                  key={exp.title}
-                  className="shape-nav__chip"
-                  href={`#experience-${slugify(exp.title)}`}
-                  title={exp.title}
-                >
-                  <span>{exp.title}</span>
-                </a>
-              ))}
-            </div>
-            <a
-              className="shape-nav__item shape-nav__item--primary"
-              href="#projects"
-            >
-              <span className="shape-nav__code">03</span>
-              <span className="shape-nav__label">Projects</span>
-            </a>
-            <div className="shape-nav__cluster">
-              {projects.map((proj) => (
-                <a
-                  key={proj.title}
-                  className="shape-nav__chip shape-nav__chip--dark"
-                  href={`#project-${slugify(proj.title)}`}
-                  title={proj.title}
-                >
-                  <span>{proj.title}</span>
-                </a>
-              ))}
-            </div>
-          </nav>
+          <div className="page__spacer" aria-hidden="true" />
 
           <div className="hud-stage">
             <div className="hud-stage__frame" aria-hidden="true">
@@ -287,6 +244,51 @@ export default function Home() {
               </section>
             </div>
           </div>
+
+          <nav className="shape-nav" aria-label="Primary">
+            <a className="shape-nav__item shape-nav__item--primary" href="#about">
+              <span className="shape-nav__code">01</span>
+              <span className="shape-nav__label">About</span>
+            </a>
+            <a
+              className="shape-nav__item shape-nav__item--primary shape-nav__item--alt"
+              href="#experience"
+            >
+              <span className="shape-nav__code">02</span>
+              <span className="shape-nav__label">Experience</span>
+            </a>
+            <div className="shape-nav__cluster">
+              {experiences.map((exp) => (
+                <a
+                  key={exp.title}
+                  className="shape-nav__chip"
+                  href={`#experience-${slugify(exp.title)}`}
+                  title={exp.title}
+                >
+                  <span>{exp.title}</span>
+                </a>
+              ))}
+            </div>
+            <a
+              className="shape-nav__item shape-nav__item--primary"
+              href="#projects"
+            >
+              <span className="shape-nav__code">03</span>
+              <span className="shape-nav__label">Projects</span>
+            </a>
+            <div className="shape-nav__cluster">
+              {projects.map((proj) => (
+                <a
+                  key={proj.title}
+                  className="shape-nav__chip shape-nav__chip--dark"
+                  href={`#project-${slugify(proj.title)}`}
+                  title={proj.title}
+                >
+                  <span>{proj.title}</span>
+                </a>
+              ))}
+            </div>
+          </nav>
         </main>
       </SiteShell>
     </>
