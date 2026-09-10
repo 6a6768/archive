@@ -25,9 +25,9 @@ const experiences: Entry[] = [
     subtitle: 'Sherpa Collaborative',
     dates: 'June 2026 – Present',
     detail: [
-      'Build and publish new product, landing, and informational pages, update site navigation and homepage layouts, and integrate social feeds and map/location widgets across 5+ active client websites.',
-      'Develop custom features and API integrations beyond standard CMS/theme capabilities, including lead capture forms and multi-step booking flows, plus performance optimization work in coordination with SEO partners.',
-      'Operational Support: Maintain internal tooling, conduct QA and cross-browser testing pre-launch, and document completed builds and technical issues to keep the account team aligned.',
+      'Build and publish product, landing, and informational pages (HTML/CSS/Liquid); update navigation and homepage layouts; integrate social feeds and map widgets across 5+ clients on Shopify, Squarespace, and Webflow.',
+      'Build custom features, API integrations, and Shopify theme customizations (Liquid, JS, Slick.js sliders); develop lead capture forms and multi-step booking flows; support performance optimization with SEO partners.',
+      'Maintain internal tooling and DNS/email configs (Google Workspace, SPF/DKIM/DMARC, Klaviyo); conduct QA and cross-browser testing pre-launch; document builds and issues for the account team.',
     ],
   },
   {
