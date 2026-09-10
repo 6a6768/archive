@@ -17,7 +17,9 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-const aboutText = `UCI 25 with a Bachelor's in Computer Science \n Specialization in Intelligent Systems \n I enjoy working with AI and ML models`;
+const aboutText = `UCI ’25 · B.S. Computer Science
+Specialization in Intelligent Systems
+Building for the web, mobile, and ML — from client sites to models from scratch.`;
 
 const experiences: Entry[] = [
   {
