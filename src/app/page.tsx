@@ -184,6 +184,51 @@ export default function Home() {
       <Atmosphere />
       <SiteShell>
         <main className="page">
+          <nav className="shape-nav" aria-label="Primary">
+            <a className="shape-nav__item shape-nav__item--primary" href="#about">
+              <span className="shape-nav__code">01</span>
+              <span className="shape-nav__label">About</span>
+            </a>
+            <a
+              className="shape-nav__item shape-nav__item--primary shape-nav__item--alt"
+              href="#experience"
+            >
+              <span className="shape-nav__code">02</span>
+              <span className="shape-nav__label">Experience</span>
+            </a>
+            <div className="shape-nav__cluster">
+              {experiences.map((exp) => (
+                <a
+                  key={exp.title}
+                  className="shape-nav__chip"
+                  href={`#experience-${slugify(exp.title)}`}
+                  title={exp.title}
+                >
+                  <span>{exp.title}</span>
+                </a>
+              ))}
+            </div>
+            <a
+              className="shape-nav__item shape-nav__item--primary"
+              href="#projects"
+            >
+              <span className="shape-nav__code">03</span>
+              <span className="shape-nav__label">Projects</span>
+            </a>
+            <div className="shape-nav__cluster">
+              {projects.map((proj) => (
+                <a
+                  key={proj.title}
+                  className="shape-nav__chip shape-nav__chip--dark"
+                  href={`#project-${slugify(proj.title)}`}
+                  title={proj.title}
+                >
+                  <span>{proj.title}</span>
+                </a>
+              ))}
+            </div>
+          </nav>
+
           <div className="hud-stage">
             <div className="hud-stage__frame" aria-hidden="true">
               <span className="hud-corner hud-corner--tl" />
@@ -211,80 +256,35 @@ export default function Home() {
               </p>
             </header>
 
-            <nav className="hud-nav" aria-label="Primary">
-              <a className="hud-nav__btn" href="#about">
-                <span className="nav-code">01</span>
-                <span className="hud-nav__label">About</span>
-              </a>
-              <a className="hud-nav__btn" href="#experience">
-                <span className="nav-code">02</span>
-                <span className="hud-nav__label">Experience</span>
-              </a>
-              <a className="hud-nav__btn" href="#projects">
-                <span className="nav-code">03</span>
-                <span className="hud-nav__label">Projects</span>
-              </a>
-            </nav>
-
-            <div className="layout">
-              <aside className="sidebar">
-                <div className="sidebar-title">Navigation</div>
-                <div className="sidebar-section sidebar-section--flush">
-                  <div className="sidebar-subtitle">Experience</div>
-                  <ul className="sidebar-list sidebar-list--nested">
-                    {experiences.map((exp) => (
-                      <li key={exp.title}>
-                        <a href={`#experience-${slugify(exp.title)}`}>
-                          {exp.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+            <div className="content">
+              <section className="forum-section" id="about">
+                <SectionHeading code="01" title="About" />
+                <div className="forum-section__body">
+                  <div className="about-text">{aboutText}</div>
                 </div>
-                <div className="sidebar-section">
-                  <div className="sidebar-subtitle">Projects</div>
-                  <ul className="sidebar-list sidebar-list--nested">
-                    {projects.map((proj) => (
-                      <li key={proj.title}>
-                        <a href={`#project-${slugify(proj.title)}`}>
-                          {proj.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+              </section>
+
+              <section className="forum-section" id="experience">
+                <SectionHeading code="02" title="Experience" />
+                <div className="forum-section__body">
+                  <EntryList
+                    items={experiences}
+                    emptyLabel="(List roles or milestones.)"
+                    idPrefix="experience"
+                  />
                 </div>
-              </aside>
+              </section>
 
-              <div className="content">
-                <section className="forum-section" id="about">
-                  <SectionHeading code="01" title="About" />
-                  <div className="forum-section__body">
-                    <div className="about-text">{aboutText}</div>
-                  </div>
-                </section>
-
-                <section className="forum-section" id="experience">
-                  <SectionHeading code="02" title="Experience" />
-                  <div className="forum-section__body">
-                    <EntryList
-                      items={experiences}
-                      emptyLabel="(List roles or milestones.)"
-                      idPrefix="experience"
-                    />
-                  </div>
-                </section>
-
-                <section className="forum-section" id="projects">
-                  <SectionHeading code="03" title="Projects" />
-                  <div className="forum-section__body">
-                    <EntryList
-                      items={projects}
-                      emptyLabel="(Add your projects.)"
-                      idPrefix="project"
-                    />
-                  </div>
-                </section>
-              </div>
+              <section className="forum-section" id="projects">
+                <SectionHeading code="03" title="Projects" />
+                <div className="forum-section__body">
+                  <EntryList
+                    items={projects}
+                    emptyLabel="(Add your projects.)"
+                    idPrefix="project"
+                  />
+                </div>
+              </section>
             </div>
           </div>
         </main>

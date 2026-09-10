@@ -19,22 +19,22 @@ export default function IntroGate({ onEnter }: IntroGateProps) {
 
   return (
     <div className="intro-gate" role="dialog" aria-label="Enter portfolio">
-      <button type="button" className="intro-gate__hit" onClick={onEnter}>
-        <div className="intro-gate__frame" aria-hidden="true">
-          <span className="hud-corner hud-corner--tl" />
-          <span className="hud-corner hud-corner--tr" />
-          <span className="hud-corner hud-corner--bl" />
-          <span className="hud-corner hud-corner--br" />
-        </div>
-        <p className="intro-gate__mark">Portfolio</p>
-        <h1 className="intro-gate__title">Jesus Rafael Palo</h1>
-        <p className="intro-gate__line">
-          Work across systems, models, and the web.
-        </p>
-        <span className="intro-gate__cta" aria-hidden="true">
-          →
+      <button
+        type="button"
+        className="intro-gate__hit"
+        onClick={onEnter}
+        aria-label="Enter"
+      >
+        <span className="intro-orb" aria-hidden="true">
+          <span className="intro-orb__ring intro-orb__ring--outer" />
+          <span className="intro-orb__ring intro-orb__ring--mid" />
+          <span className="intro-orb__ring intro-orb__ring--inner" />
+          <span className="intro-orb__core" />
+          <span className="intro-orb__tick intro-orb__tick--n" />
+          <span className="intro-orb__tick intro-orb__tick--e" />
+          <span className="intro-orb__tick intro-orb__tick--s" />
+          <span className="intro-orb__tick intro-orb__tick--w" />
         </span>
-        <span className="intro-gate__hint">Click or press any key</span>
       </button>
     </div>
   );
