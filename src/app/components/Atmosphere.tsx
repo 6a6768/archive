@@ -56,25 +56,18 @@ export default function Atmosphere() {
           </filter>
         </defs>
 
-        {/* LEFT: reinforce photo with dark veil + HUD only (photo carries girders) */}
-        <path
-          className="atmosphere__dark-mass"
-          d="M-40 -40 L560 -40 L300 1280 L-40 1280 Z"
-          fill="url(#leftDark)"
-          opacity="0.28"
-        />
+        {/* LEFT: light HUD accents only — photo carries the design */}
         <rect
           x="0"
           y="0"
-          width="160"
+          width="120"
           height="1200"
           fill="url(#dotGrid)"
-          opacity="0.3"
+          opacity="0.22"
         />
-        <rect x="0" y="0" width="18" height="1200" fill="#152033" opacity="0.65" />
 
         {/* Left HUD micro-graphics */}
-        <g fill="#c5d4e4" opacity="0.55">
+        <g fill="#c5d4e4" opacity="0.45">
           <rect x="40" y="180" width="3" height="10" />
           <rect x="46" y="186" width="3" height="8" />
           <rect x="52" y="182" width="3" height="12" />
@@ -87,7 +80,7 @@ export default function Atmosphere() {
           <rect x="40" y="700" width="3" height="14" />
           <rect x="46" y="706" width="3" height="8" />
         </g>
-        <g fill="none" stroke="#9eb0c4" strokeWidth="1.2" opacity="0.5">
+        <g fill="none" stroke="#9eb0c4" strokeWidth="1.2" opacity="0.4">
           <circle cx="56" cy="980" r="10" />
           <circle cx="56" cy="980" r="5" />
           <circle cx="56" cy="1018" r="10" />
@@ -143,38 +136,35 @@ export default function Atmosphere() {
             <line x1="1400" y1="708" x2="1400" y2="724" />
           </g>
         </g>
-
-        {/* Right mark cluster — original geometric block (not their logo) */}
-        <g className="atmosphere__mark-cluster" transform="translate(1240, 560)">
-          <g fill="none" stroke="#9aa6b2" strokeWidth="1.4" opacity="0.7">
-            <circle cx="18" cy="0" r="11" />
-            <circle cx="18" cy="0" r="5.5" />
-            <circle cx="52" cy="0" r="11" />
-            <circle cx="52" cy="0" r="5.5" />
-          </g>
-          {/* Blocky abstract emblem */}
-          <path
-            d="M0 36 L42 28 L58 28 L58 96 L28 96 L28 68 L0 72 Z"
-            fill="#1a2130"
-          />
-          <path
-            d="M66 28 L118 28 L118 96 L88 96 L88 52 L66 52 Z"
-            fill="#1a2130"
-          />
-          <rect x="0" y="108" width="78" height="6" fill="#1a2130" opacity="0.85" />
-          <rect x="0" y="118" width="48" height="3" fill="#6b7782" opacity="0.7" />
-        </g>
       </svg>
+
+      {/* Emblem blocks — far right, beside the nav (not behind it) */}
+      <div className="atmosphere__emblem" aria-hidden="true">
+        <svg viewBox="0 0 120 130" className="atmosphere__emblem-svg">
+          <path
+            d="M0 8 L42 0 L58 0 L58 68 L28 68 L28 40 L0 44 Z"
+            fill="#1a2130"
+          />
+          <path
+            d="M66 0 L118 0 L118 68 L88 68 L88 24 L66 24 Z"
+            fill="#1a2130"
+          />
+          <rect x="0" y="82" width="78" height="6" fill="#1a2130" opacity="0.9" />
+          <rect x="0" y="92" width="48" height="3" fill="#6b7782" opacity="0.75" />
+        </svg>
+      </div>
+
+      {/* Far-right accent rings — sit outside/beside the nav column */}
+      <div className="atmosphere__edge-rings" aria-hidden="true">
+        <span />
+        <span />
+      </div>
 
       {/* Right-edge column like the reference logo strip */}
       <div className="atmosphere__side">
         <span className="atmosphere__side-line" />
         <span className="atmosphere__side-line atmosphere__side-line--mid" />
         <span className="atmosphere__side-mark">+</span>
-        <div className="atmosphere__side-rings">
-          <span />
-          <span />
-        </div>
         <div className="atmosphere__side-brand" />
         <div className="atmosphere__side-rule" />
         <div className="atmosphere__side-panel" />

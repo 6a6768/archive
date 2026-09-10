@@ -237,10 +237,10 @@ a:hover {
   background:
     linear-gradient(
       125deg,
-      #0d1520 0%,
-      #152033 18%,
-      rgba(232, 238, 244, 0.28) 40%,
-      #ffffff 52%,
+      rgba(13, 21, 32, 0.15) 0%,
+      rgba(21, 32, 51, 0.08) 22%,
+      rgba(255, 255, 255, 0.4) 42%,
+      #ffffff 55%,
       #ffffff 100%
     );
 }
@@ -249,24 +249,26 @@ a:hover {
   position: absolute;
   inset: 0;
   background-repeat: no-repeat;
-  /* Zoom out so more of the left artwork is visible */
   background-size: 78% auto;
   background-position: -4% 42%;
+  /* Soft feather instead of a hard diagonal cut */
   -webkit-mask-image: linear-gradient(
-    115deg,
+    105deg,
     #000 0%,
-    #000 32%,
-    rgba(0, 0, 0, 0.6) 42%,
-    transparent 54%
+    #000 28%,
+    rgba(0, 0, 0, 0.75) 40%,
+    rgba(0, 0, 0, 0.25) 50%,
+    transparent 62%
   );
   mask-image: linear-gradient(
-    115deg,
+    105deg,
     #000 0%,
-    #000 32%,
-    rgba(0, 0, 0, 0.6) 42%,
-    transparent 54%
+    #000 28%,
+    rgba(0, 0, 0, 0.75) 40%,
+    rgba(0, 0, 0, 0.25) 50%,
+    transparent 62%
   );
-  opacity: 0.95;
+  opacity: 0.97;
   filter: saturate(0.85) contrast(1.05);
 }
 
@@ -298,7 +300,7 @@ a:hover {
 }
 
 .atmosphere__dark-mass {
-  animation: dark-breathe 48s ease-in-out infinite alternate;
+  display: none;
 }
 
 .atmosphere__girders {
@@ -392,36 +394,51 @@ a:hover {
   color: #a8b2bc;
 }
 
-.atmosphere__side-rings {
+/* Black polygon emblem — far right, clear of the nav column */
+.atmosphere__emblem {
   position: absolute;
-  left: 22px;
-  top: 52%;
-  display: flex;
-  gap: 12px;
+  top: 42%;
+  right: 14px;
+  width: 72px;
+  z-index: 3;
+  opacity: 0.92;
+  pointer-events: none;
 }
 
-.atmosphere__side-rings span {
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid #b0bac4;
+.atmosphere__emblem-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Double rings parked at the viewport's far right, clear of the nav */
+.atmosphere__edge-rings {
+  position: absolute;
+  top: 36%;
+  right: 28px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  z-index: 3;
+  opacity: 0.9;
+}
+
+.atmosphere__edge-rings span {
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid #8a959e;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    transparent 40%,
-    #b0bac4 41%,
-    #b0bac4 48%,
+    transparent 38%,
+    #8a959e 39%,
+    #8a959e 48%,
     transparent 49%
   );
 }
 
 .atmosphere__side-brand {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  top: 60%;
-  height: 56px;
-  background: #1a2130;
-  clip-path: polygon(0 22%, 68% 0, 100% 0, 100% 100%, 0 100%);
+  display: none;
 }
 
 .atmosphere__side-rule {
@@ -1083,6 +1100,20 @@ a:hover {
   .atmosphere__side {
     width: 72px;
     opacity: 0.25;
+  }
+
+  .atmosphere__edge-rings {
+    top: auto;
+    bottom: 22%;
+    right: 14px;
+    flex-direction: row;
+  }
+
+  .atmosphere__emblem {
+    top: auto;
+    bottom: 8%;
+    right: 12px;
+    width: 56px;
   }
 }
 
