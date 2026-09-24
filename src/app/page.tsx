@@ -1,8 +1,3 @@
-'use client';
-
-import Atmosphere from './components/Atmosphere';
-import { SiteShell } from './components/IntroGate';
-
 type Entry = {
   title: string;
   detail?: string | string[];
@@ -119,28 +114,13 @@ const projects: Entry[] = [
   },
 ];
 
-function EntryList({
-  items,
-  emptyLabel,
-  idPrefix,
-}: {
-  items: Entry[];
-  emptyLabel: string;
-  idPrefix?: string;
-}) {
-  if (!items.length) {
-    return <p className="forum-empty">{emptyLabel}</p>;
-  }
-
+function EntryList({ items, idPrefix }: { items: Entry[]; idPrefix: string }) {
   return (
-    <ul className="forum-list">
+    <ul className="entries">
       {items.map((item) => (
-        <li
-          key={item.title}
-          id={idPrefix ? `${idPrefix}-${slugify(item.title)}` : undefined}
-        >
+        <li key={item.title} id={`${idPrefix}-${slugify(item.title)}`}>
           <div className="entry-header">
-            <div className="entry-title">
+            <h3 className="entry-title">
               {item.link ? (
                 <a href={item.link} target="_blank" rel="noreferrer">
                   {item.title}
@@ -148,22 +128,18 @@ function EntryList({
               ) : (
                 item.title
               )}
-            </div>
-            {item.dates ? <div className="entry-dates">{item.dates}</div> : null}
+            </h3>
+            {item.dates ? <span className="entry-dates">{item.dates}</span> : null}
           </div>
-          {item.subtitle ? (
-            <div className="entry-subtitle">{item.subtitle}</div>
-          ) : null}
-          {item.detail ? (
-            Array.isArray(item.detail) ? (
-              <ul className="entry-detail-list">
-                {item.detail.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
-            ) : (
-              <div className="entry-detail">{item.detail}</div>
-            )
+          {item.subtitle ? <p className="entry-subtitle">{item.subtitle}</p> : null}
+          {Array.isArray(item.detail) ? (
+            <ul className="entry-detail">
+              {item.detail.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          ) : item.detail ? (
+            <p className="entry-detail">{item.detail}</p>
           ) : null}
         </li>
       ))}
@@ -171,129 +147,33 @@ function EntryList({
   );
 }
 
-function SectionHeading({ code, title }: { code: string; title: string }) {
-  return (
-    <header className="forum-section__header">
-      <p className="section-code">{code}</p>
-      <h2>{title}</h2>
-    </header>
-  );
-}
-
 export default function Home() {
   return (
-    <>
-      <Atmosphere />
-      <SiteShell>
-        <main className="page">
-          <div className="page__spacer" aria-hidden="true" />
+    <main className="page">
+      <header className="masthead">
+        <h1>Jesus Rafael Palo</h1>
+        <p>jesus.rafaelpalo@gmail.com · 619-746-5345</p>
+        <nav aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+        </nav>
+      </header>
 
-          <div className="hud-stage">
-            <div className="hud-stage__frame" aria-hidden="true">
-              <span className="hud-corner hud-corner--tl" />
-              <span className="hud-corner hud-corner--tr" />
-              <span className="hud-corner hud-corner--bl" />
-              <span className="hud-corner hud-corner--br" />
-              <span className="hud-rivet hud-rivet--tl" />
-              <span className="hud-rivet hud-rivet--tr" />
-              <span className="hud-rivet hud-rivet--bl" />
-              <span className="hud-rivet hud-rivet--br" />
-            </div>
-            <div className="hud-rail hud-rail--left" aria-hidden="true" />
-            <div className="hud-rail hud-rail--right" aria-hidden="true" />
+      <section id="about">
+        <h2>About</h2>
+        <p className="about-text">{aboutText}</p>
+      </section>
 
-            <div className="hud-status">
-              <span>Online</span>
-              <span className="hud-status__pulse" />
-              <span>Portfolio</span>
-            </div>
+      <section id="experience">
+        <h2>Experience</h2>
+        <EntryList items={experiences} idPrefix="experience" />
+      </section>
 
-            <header className="forum-banner">
-              <div className="forum-title">Jesus Rafael Palo</div>
-              <p className="forum-subtitle">
-                jesus.rafaelpalo@gmail.com · 619-746-5345
-              </p>
-            </header>
-
-            <div className="content">
-              <section className="forum-section" id="about">
-                <SectionHeading code="01" title="About" />
-                <div className="forum-section__body">
-                  <div className="about-text">{aboutText}</div>
-                </div>
-              </section>
-
-              <section className="forum-section" id="experience">
-                <SectionHeading code="02" title="Experience" />
-                <div className="forum-section__body">
-                  <EntryList
-                    items={experiences}
-                    emptyLabel="(List roles or milestones.)"
-                    idPrefix="experience"
-                  />
-                </div>
-              </section>
-
-              <section className="forum-section" id="projects">
-                <SectionHeading code="03" title="Projects" />
-                <div className="forum-section__body">
-                  <EntryList
-                    items={projects}
-                    emptyLabel="(Add your projects.)"
-                    idPrefix="project"
-                  />
-                </div>
-              </section>
-            </div>
-          </div>
-
-          <nav className="shape-nav" aria-label="Primary">
-            <a className="shape-nav__item shape-nav__item--primary" href="#about">
-              <span className="shape-nav__code">01</span>
-              <span className="shape-nav__label">About</span>
-            </a>
-            <a
-              className="shape-nav__item shape-nav__item--primary shape-nav__item--alt"
-              href="#experience"
-            >
-              <span className="shape-nav__code">02</span>
-              <span className="shape-nav__label">Experience</span>
-            </a>
-            <div className="shape-nav__cluster">
-              {experiences.map((exp) => (
-                <a
-                  key={exp.title}
-                  className="shape-nav__chip"
-                  href={`#experience-${slugify(exp.title)}`}
-                  title={exp.title}
-                >
-                  <span>{exp.title}</span>
-                </a>
-              ))}
-            </div>
-            <a
-              className="shape-nav__item shape-nav__item--primary"
-              href="#projects"
-            >
-              <span className="shape-nav__code">03</span>
-              <span className="shape-nav__label">Projects</span>
-            </a>
-            <div className="shape-nav__cluster">
-              {projects.map((proj) => (
-                <a
-                  key={proj.title}
-                  className="shape-nav__chip shape-nav__chip--dark"
-                  href={`#project-${slugify(proj.title)}`}
-                  title={proj.title}
-                >
-                  <span>{proj.title}</span>
-                </a>
-              ))}
-            </div>
-          </nav>
-        </main>
-      </SiteShell>
-    </>
+      <section id="projects">
+        <h2>Projects</h2>
+        <EntryList items={projects} idPrefix="project" />
+      </section>
+    </main>
   );
 }
-
