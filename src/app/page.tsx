@@ -22,9 +22,9 @@ const experiences: Entry[] = [
     subtitle: 'Sherpa Collaborative',
     dates: 'June 2026 – Present',
     detail: [
-      'Build and publish product, landing, and informational pages (HTML/CSS/Liquid); update navigation and homepage layouts; integrate social feeds and map widgets across 5+ clients on Shopify, Squarespace, and Webflow.',
-      'Build custom features, API integrations, and Shopify theme customizations (Liquid, JS, Slick.js sliders); develop lead capture forms and multi-step booking flows; support performance optimization with SEO partners.',
-      'Maintain internal tooling and DNS/email configs (Google Workspace, SPF/DKIM/DMARC, Klaviyo); conduct QA and cross-browser testing pre-launch; document builds and issues for the account team.',
+      "Owned delivery of product, landing, and informational pages (HTML/CSS/Liquid) across 5+ client accounts on Shopify, Squarespace, and Webflow, prioritizing build work by balancing client requirements against account team timelines.",
+      "Built and launched custom features, API integrations, and Shopify theme customizations (Liquid, JS, Slick.js), including lead-capture forms, multi-step booking flows, and seasonal sale banners, one of which helped drive a 25% sales increase during launch week, and partnered with SEO partners to identify and act on performance opportunities.",
+      "Managed internal tooling and DNS/email infrastructure (Google Workspace, SPF/DKIM/DMARC, Klaviyo), owning QA and cross-browser testing pre-launch and documenting builds/issues to keep the account team aligned on status.",
     ],
   },
   {
@@ -32,9 +32,9 @@ const experiences: Entry[] = [
     subtitle: 'Philippine Institute of Civil Engineers, USA Chapter',
     dates: 'Dec 2025 – Present',
     detail: [
-      'Developing a cross-platform mobile membership app using React Native (Expo) with a Next.js backend to improve accessibility to organization news and events for 100+ members.',
-      'Implementing secure member authentication, applications, and renewal workflows, including profile and membership status management.',
-      'Building event registration and content delivery features for newsletters, blog/vlog posts, and announcements, with real-time updates for members.',
+      "Spearheaded the product and technical design of a React Native / Expo membership app for iOS, taking it from an identified gap in the member experience to a live product serving 100+ PICE USA members, with Supabase-backed auth and role-based access (guest/member/admin) scoped to distinct user needs.",
+      "Drove biweekly check-ins with the PICE USA president and members to validate priorities and reshape the roadmap, translating stakeholder input directly into feature decisions around access control, content sync, and app navigation.",
+      "Architected and shipped an end-to-end Stripe payment flow for membership renewals, weighing UX, cost, and scalability tradeoffs to launch tiered pricing on a fully serverless backend at $0/month in infrastructure costs.",
     ],
   },
   {
@@ -42,9 +42,9 @@ const experiences: Entry[] = [
     subtitle: 'UCI Undergraduate Research Opportunities Program',
     dates: 'Sep 2024 – Dec 2024',
     detail: [
-      'Developed a searchable database system for UROP to manage student data, designing a RESTful Express.js backend and implementing a normalized SQLite schema.',
-      'Acted as liaison between technical team and non-technical sponsors, translating requirements into technical objectives and coordinating Agile sprint deliverables.',
-      'Achieved > 80% backend and frontend test coverage using Jest and React Testing Library; delivered across phases including UI/UX, software design, and software testing.',
+      "Led cross-functional delivery as liaison between the technical team and non-technical sponsors, translating ambiguous requirements into scoped technical objectives and coordinating Agile sprints.",
+      "Designed and shipped a searchable student database system for UROP, architecting a RESTful Express.js backend and normalized SQLite schema scoped directly to sponsor needs.",
+      "Drove quality standards across the team, achieving 80% backend and frontend test coverage (Jest, React Testing Library) and delivering across UI/UX, design, and testing phases on schedule.",
     ],
   },
   {
